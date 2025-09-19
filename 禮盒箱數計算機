@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>禮盒箱數計算機</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: system-ui, -apple-system, 'PingFang TC', 'Noto Sans TC', sans-serif; background:#f9fafb; }
+    .num::-webkit-outer-spin-button, .num::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
+    .num { -moz-appearance: textfield; }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+  <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md">
+    <h1 class="text-2xl font-bold text-center mb-6">禮盒箱數計算機</h1>
+    <div class="space-y-4">
+      <label class="flex justify-between">12入禮盒 <input id="box12" type="number" min="0" value="0" class="num w-24 text-center border rounded-lg" /></label>
+      <label class="flex justify-between">10入禮盒 <input id="box10" type="number" min="0" value="0" class="num w-24 text-center border rounded-lg" /></label>
+      <label class="flex justify-between">8入禮盒  <input id="box8"  type="number" min="0" value="0" class="num w-24 text-center border rounded-lg" /></label>
+      <label class="flex justify-between">6入禮盒  <input id="box6"  type="number" min="0" value="0" class="num w-24 text-center border rounded-lg" /></label>
+    </div>
+    <button id="calculateBtn" class="w-full mt-6 bg-blue-600 text-white py-2 rounded-lg">計算箱數</button>
+    <div id="results" class="mt-6 p-4 bg-blue-50 rounded-lg">
+      <h2 class="font-semibold mb-2">計算結果</h2>
+      <p id="resultText">請輸入數量並點擊「計算箱數」。</p>
+    </div>
+  </div>
+  <script>
+    document.getElementById('calculateBtn').addEventListener('click', () => {
+      const b12 = parseInt(document.getElementById('box12').value)||0;
+      const b10 = parseInt(document.getElementById('box10').value)||0;
+      const b8  = parseInt(document.getElementById('box8').value)||0;
+      const b6  = parseInt(document.getElementById('box6').value)||0;
+      const totalUnits = b12*2 + b10 + b8 + b6;
+      let large = Math.floor(totalUnits/12);
+      let remain = totalUnits%12;
+      let medium = 0;
+      if(remain>0){ medium = remain>8?0:1; if(remain>8) large++; }
+      document.getElementById('resultText').innerHTML =
+        `大箱：${large} 個<br>中箱：${medium} 個<br>總單位：${totalUnits}`;
+    });
+  </script>
+</body>
+</html>
