@@ -51,7 +51,8 @@
       const v = id => parseInt(document.getElementById(id).value) || 0;
 
       // 單位計算（用來排箱子）
-      const totalUnits = v('box12')*2 + v('box10') + v('box8') + v('box6');
+      const weight12 = 12/7; // ≈ 1.714
+      const totalUnits = v('box12')*weight12 + v('box10') + v('box8') + v('box6');
       let big = Math.floor(totalUnits / 12);
       const rem = totalUnits % 12;
       let mid = 0;
