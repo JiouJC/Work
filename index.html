@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>出貨計算小工具</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Flatpickr CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <style>
     body {
       font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", sans-serif;
@@ -57,7 +59,7 @@
     <section>
       <h2 class="font-semibold mb-2">效期計算</h2>
       <div class="flex gap-2 mb-2">
-        <input id="mfgDate" type="date" class="border rounded px-2 py-1 flex-1">
+        <input id="mfgDate" type="text" placeholder="選擇日期" class="border rounded px-2 py-1 flex-1">
         <select id="storageType" class="border rounded px-2 py-1">
           <option value="14">冷藏+14天</option>
           <option value="21">常溫+21天</option>
@@ -79,14 +81,16 @@
     </section>
   </main>
 
+  <!-- Flatpickr JS & 中文語系 -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh-tw.js"></script>
+
   <script>
-    // 預設帶入今天日期
-    window.addEventListener('DOMContentLoaded', () => {
-      const today = new Date();
-      const yyyy = today.getFullYear();
-      const mm = String(today.getMonth()+1).padStart(2,'0');
-      const dd = String(today.getDate()).padStart(2,'0');
-      document.getElementById('mfgDate').value = `${yyyy}-${mm}-${dd}`;
+    // 啟用 Flatpickr 中文日曆
+    flatpickr("#mfgDate", {
+      locale: "zh_tw",
+      dateFormat: "Y年m月d日",
+      defaultDate: "today"
     });
 
     // 箱數計算
@@ -116,11 +120,11 @@
     document.getElementById('expiryBtn').addEventListener('click', () => {
       const mfg = document.getElementById('mfgDate').value;
       const days = parseInt(document.getElementById('storageType').value);
-      if(!mfg){ document.getElementById('expiryResult').textContent = '請輸入日期'; return; }
-      const mfgDate = new Date(mfg);
+      if(!mfg){ document.getElementById('expiryResult').textContent = '請選擇日期'; return; }
+      const mfgDate = new Date(mfg.replace(/[年月]/g, "-").replace("日","")); 
       if(isNaN(mfgDate)){ document.getElementById('expiryResult').textContent = '日期格式錯誤'; return; }
       const expiry = new Date(mfgDate.getTime() + days*24*60*60*1000);
-      document.getElementById('expiryResult').textContent = `到期日：${expiry.getFullYear()}/${expiry.getMonth()+1}/${expiry.getDate()}`;
+      document.getElementById('expiryResult').textContent = `到期日：${expiry.getFullYear()}年${expiry.getMonth()+1}月${expiry.getDate()}日`;
     });
 
     // 批號轉換 (16進 -> 10進)
