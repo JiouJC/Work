@@ -57,7 +57,7 @@
     <section>
       <h2 class="font-semibold mb-2">效期計算</h2>
       <div class="flex gap-2 mb-2">
-        <input id="mfgDate" type="text" placeholder="MM/DD" class="border rounded px-2 py-1 flex-1">
+        <input id="mfgDate" type="date" class="border rounded px-2 py-1 flex-1">
         <select id="storageType" class="border rounded px-2 py-1">
           <option value="14">冷藏+14天</option>
           <option value="21">常溫+21天</option>
@@ -68,28 +68,25 @@
       <p id="expiryResult" class="mt-2 text-gray-700"></p>
     </section>
 
-    <!-- 批號轉換 -->
+    <!-- 批號轉換 (16進制 -> 10進制) -->
     <section>
-      <h2 class="font-semibold mb-2">批號轉換</h2>
-      <div class="grid grid-cols-2 gap-2 mb-2">
-        <input id="decimalInput" type="number" placeholder="輸入10進制" class="border rounded px-2 py-1">
-        <input id="hexInput" type="text" placeholder="輸入16進制" class="border rounded px-2 py-1">
-      </div>
-      <div class="grid grid-cols-2 gap-2">
-        <button id="toHexBtn" class="bg-purple-600 text-white py-2 rounded">10進→16進</button>
-        <button id="toDecBtn" class="bg-orange-600 text-white py-2 rounded">16進→10進</button>
+      <h2 class="font-semibold mb-2">批號轉換 (16進制 → 10進制)</h2>
+      <div class="flex gap-2 mb-2">
+        <input id="hexInput" type="text" placeholder="輸入16進制批號" class="border rounded px-2 py-1 flex-1">
+        <button id="toDecBtn" class="bg-orange-600 text-white px-3 rounded">轉換</button>
       </div>
       <p id="batchResult" class="mt-2 text-gray-700"></p>
     </section>
   </main>
 
   <script>
-    // 預設帶入今天日期 (MM/DD)
+    // 預設帶入今天日期
     window.addEventListener('DOMContentLoaded', () => {
       const today = new Date();
+      const yyyy = today.getFullYear();
       const mm = String(today.getMonth()+1).padStart(2,'0');
       const dd = String(today.getDate()).padStart(2,'0');
-      document.getElementById('mfgDate').value = `${mm}/${dd}`;
+      document.getElementById('mfgDate').value = `${yyyy}-${mm}-${dd}`;
     });
 
     // 箱數計算
@@ -119,25 +116,20 @@
     document.getElementById('expiryBtn').addEventListener('click', () => {
       const mfg = document.getElementById('mfgDate').value;
       const days = parseInt(document.getElementById('storageType').value);
-      if(!mfg){ document.getElementById('expiryResult').textContent = '請輸入日期 (MM/DD)'; return; }
-      const year = new Date().getFullYear();
-      const [mm, dd] = mfg.split('/').map(x => parseInt(x));
-      const mfgDate = new Date(year, mm-1, dd);
+      if(!mfg){ document.getElementById('expiryResult').textContent = '請輸入日期'; return; }
+      const mfgDate = new Date(mfg);
       if(isNaN(mfgDate)){ document.getElementById('expiryResult').textContent = '日期格式錯誤'; return; }
       const expiry = new Date(mfgDate.getTime() + days*24*60*60*1000);
       document.getElementById('expiryResult').textContent = `到期日：${expiry.getFullYear()}/${expiry.getMonth()+1}/${expiry.getDate()}`;
     });
 
-    // 批號轉換
-    document.getElementById('toHexBtn').addEventListener('click', () => {
-      const dec = parseInt(document.getElementById('decimalInput').value);
-      if(isNaN(dec)){ document.getElementById('batchResult').textContent = '請輸入有效的10進制數字'; return; }
-      document.getElementById('batchResult').textContent = `10進 ${dec} = 16進 ${dec.toString(16).toUpperCase()}`;
-    });
-
+    // 批號轉換 (16進 -> 10進)
     document.getElementById('toDecBtn').addEventListener('click', () => {
       const hex = document.getElementById('hexInput').value.trim();
-      if(!/^[0-9a-fA-F]+$/.test(hex)){ document.getElementById('batchResult').textContent = '請輸入有效的16進制字串'; return; }
+      if(!/^[0-9a-fA-F]+$/.test(hex)){ 
+        document.getElementById('batchResult').textContent = '請輸入有效的16進制字串'; 
+        return; 
+      }
       const dec = parseInt(hex,16);
       document.getElementById('batchResult').textContent = `16進 ${hex.toUpperCase()} = 10進 ${dec}`;
     });
