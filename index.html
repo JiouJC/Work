@@ -125,13 +125,13 @@
 
         // 數據矩陣：[小, 中, 大]
         const DATA = {
-            item1: [1, 4, 2],
-            item2: [2, 4, 2],
-            item3: [4, 16, 6],
-            item4: [3, 12, 6],
-            item5: [3, 10, 8],
-            item6: [3, 10, 8],
-            item7: [8, 12, 10]
+            item1: [1, 2, 4],
+            item2: [2, 2, 4],
+            item3: [4, 6, 16],
+            item4: [3, 6, 12],
+            item5: [3, 8, 10],
+            item6: [3, 8, 10],
+            item7: [8, 10, 12]
         };
 
         // 箱數計算邏輯
@@ -147,12 +147,12 @@
             let res = { large: 0, medium: 0, small: 0 };
             const totalItems = Object.values(counts).reduce((a, b) => a + b, 0);
 
-            // 1. 優先填滿中箱 (中箱在您的數據中效率最高)
+            // 1. 優先填滿大箱 (大箱在您的數據中效率最高)
             for (let key in DATA) {
                 let medCap = DATA[key][1];
                 if (counts[key] >= medCap) {
                     let num = Math.floor(counts[key] / medCap);
-                    res.medium += num;
+                    res.large += num;
                     counts[key] %= medCap;
                 }
             }
