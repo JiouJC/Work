@@ -1,142 +1,224 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>出貨計算小工具</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Flatpickr CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <style>
-    body {
-      font-family: system-ui, -apple-system, "PingFang TC", "Noto Sans TC", sans-serif;
-      background: #f8fafc;
-    }
-    .num::-webkit-outer-spin-button,
-    .num::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-    .num {
-      -moz-appearance: textfield;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>出貨計算小工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+        body {
+            font-family: 'Noto Sans TC', system-ui, -apple-system, sans-serif;
+            background: #f1f5f9;
+        }
+        .num::-webkit-outer-spin-button,
+        .num::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .num {
+            -moz-appearance: textfield;
+        }
+        .section-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+        }
+    </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
-  <main class="w-full max-w-md bg-white rounded-xl shadow-xl p-6 space-y-6">
-    <h1 class="text-2xl font-bold text-center">📦 出貨計算機</h1>
+<body class="min-h-screen py-8 px-4">
+    <main class="w-full max-w-2xl mx-auto space-y-6">
+        <h1 class="text-3xl font-black text-center text-slate-800 mb-8">📦 出貨計算綜合工具</h1>
 
-    <!-- 箱數計算 -->
-    <section>
-      <h2 class="font-semibold mb-2">箱數計算</h2>
-      <div class="space-y-3">
-        <label class="flex justify-between">12入禮盒
-          <input id="box12" type="number" min="0" value="0" class="num w-24 text-center border rounded-lg px-2 py-1">
-        </label>
-        <label class="flex justify-between">10入禮盒
-          <input id="box10" type="number" min="0" value="0" class="num w-24 text-center border rounded-lg px-2 py-1">
-        </label>
-        <label class="flex justify-between">8入禮盒
-          <input id="box8" type="number" min="0" value="0" class="num w-24 text-center border rounded-lg px-2 py-1">
-        </label>
-        <label class="flex justify-between">6入禮盒
-          <input id="box6" type="number" min="0" value="0" class="num w-24 text-center border rounded-lg px-2 py-1">
-        </label>
-      </div>
+        <!-- 箱數計算區區塊 -->
+        <section class="section-card">
+            <div class="flex items-center justify-between mb-4 border-b pb-2">
+                <h2 class="text-lg font-bold text-slate-700">箱數計算 (精確比例)</h2>
+                <span class="text-xs text-indigo-500 font-bold bg-indigo-50 px-2 py-1 rounded">最優併箱算法</span>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 mb-6">
+                <label class="flex items-center justify-between text-sm font-medium text-slate-600">
+                    雙層-真愛挑日子
+                    <input id="item1" type="number" min="0" value="0" class="num w-20 text-center border rounded-lg px-2 py-1 focus:ring-2 focus:ring-indigo-500 outline-none">
+                </label>
+                <label class="flex items-center justify-between text-sm font-medium text-slate-600">
+                    雙層-自製盒
+                    <input id="item2" type="number" min="0" value="0" class="num w-20 text-center border rounded-lg px-2 py-1 focus:ring-2 focus:ring-indigo-500 outline-none">
+                </label>
+                <label class="flex items-center justify-between text-sm font-medium text-slate-600">
+                    華麗伯爵
+                    <input id="item3" type="number" min="0" value="0" class="num w-20 text-center border rounded-lg px-2 py-1 focus:ring-2 focus:ring-indigo-500 outline-none">
+                </label>
+                <label class="flex items-center justify-between text-sm font-medium text-slate-600">
+                    山茶花開時&HANA
+                    <input id="item4" type="number" min="0" value="0" class="num w-20 text-center border rounded-lg px-2 py-1 focus:ring-2 focus:ring-indigo-500 outline-none">
+                </label>
+                <label class="flex items-center justify-between text-sm font-medium text-slate-600">
+                    和光菓室&織花
+                    <input id="item5" type="number" min="0" value="0" class="num w-20 text-center border rounded-lg px-2 py-1 focus:ring-2 focus:ring-indigo-500 outline-none">
+                </label>
+                <label class="flex items-center justify-between text-sm font-medium text-slate-600">
+                    微笑俱樂部
+                    <input id="item6" type="number" min="0" value="0" class="num w-20 text-center border rounded-lg px-2 py-1 focus:ring-2 focus:ring-indigo-500 outline-none">
+                </label>
+                <label class="flex items-center justify-between text-sm font-medium text-slate-600">
+                    6入星空天地蓋盒
+                    <input id="item7" type="number" min="0" value="0" class="num w-20 text-center border rounded-lg px-2 py-1 focus:ring-2 focus:ring-indigo-500 outline-none">
+                </label>
+            </div>
 
-      <div class="grid grid-cols-2 gap-3 mt-4">
-        <button id="calculateBtn" class="bg-blue-600 text-white py-2 rounded">計算箱數</button>
-        <button id="resetBtn" class="bg-gray-500 text-white py-2 rounded">重置</button>
-      </div>
+            <div class="grid grid-cols-2 gap-3">
+                <button id="calculateBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-indigo-100 transition-all active:scale-95">計算箱數</button>
+                <button id="resetBtn" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-bold py-3 rounded-xl transition-all active:scale-95">全部重置</button>
+            </div>
 
-      <div id="results" class="mt-4 p-4 bg-blue-50 rounded-lg">
-        <h2 class="font-semibold mb-2">計算結果</h2>
-        <p id="resultText">請輸入數量並點擊「計算箱數」。</p>
-      </div>
-    </section>
+            <div id="results" class="mt-6 p-4 bg-indigo-50 rounded-xl border border-indigo-100">
+                <h3 class="text-sm font-bold text-indigo-800 mb-2">計算結果</h3>
+                <div id="resultText" class="text-indigo-900 space-y-1">
+                    請輸入數量並點擊「計算箱數」。
+                </div>
+            </div>
+        </section>
 
-    <!-- 效期計算 -->
-    <section>
-      <h2 class="font-semibold mb-2">效期計算</h2>
-      <div class="flex gap-2 mb-2">
-        <input id="mfgDate" type="text" placeholder="選擇日期" class="border rounded px-2 py-1 flex-1">
-        <select id="storageType" class="border rounded px-2 py-1">
-          <option value="14">冷藏+14天</option>
-          <option value="21">常溫+21天</option>
-          <option value="30">特殊+30天</option>
-        </select>
-      </div>
-      <button id="expiryBtn" class="bg-green-600 text-white py-2 rounded w-full">計算效期</button>
-      <p id="expiryResult" class="mt-2 text-gray-700"></p>
-    </section>
+        <!-- 效期計算區塊 -->
+        <section class="section-card">
+            <h2 class="text-lg font-bold text-slate-700 mb-4">效期計算</h2>
+            <div class="flex flex-col md:flex-row gap-3 mb-4">
+                <input id="mfgDate" type="text" placeholder="選擇日期" class="border rounded-xl px-4 py-2 flex-1 focus:ring-2 focus:ring-emerald-500 outline-none">
+                <select id="storageType" class="border rounded-xl px-4 py-2 bg-white focus:ring-2 focus:ring-emerald-500 outline-none font-medium">
+                    <option value="14">冷藏+14天</option>
+                    <option value="21">常溫+21天</option>
+                    <option value="30">特殊+30天</option>
+                </select>
+            </div>
+            <button id="expiryBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl w-full shadow-lg shadow-emerald-100 transition-all active:scale-95">產出效期日期</button>
+            <div id="expiryResult" class="mt-4 text-center font-black text-emerald-800 text-lg min-h-[1.75rem]"></div>
+        </section>
 
-    <!-- 批號轉換 (16進制 -> 10進制) -->
-    <section>
-      <h2 class="font-semibold mb-2">批號查詢</h2>
-      <div class="flex gap-2 mb-2">
-        <input id="hexInput" type="text" placeholder="輸入16進制批號" class="border rounded px-2 py-1 flex-1">
-        <button id="toDecBtn" class="bg-orange-600 text-white px-3 rounded">轉換</button>
-      </div>
-      <p id="batchResult" class="mt-2 text-gray-700"></p>
-    </section>
-  </main>
+        <!-- 批號轉換區塊 -->
+        <section class="section-card">
+            <h2 class="text-lg font-bold text-slate-700 mb-4">批號查詢 (Hex to Dec)</h2>
+            <div class="flex gap-3 mb-2">
+                <input id="hexInput" type="text" placeholder="輸入16進制批號 (如: FF)" class="border rounded-xl px-4 py-2 flex-1 focus:ring-2 focus:ring-orange-500 outline-none uppercase font-mono">
+                <button id="toDecBtn" class="bg-orange-600 hover:bg-orange-700 text-white px-6 rounded-xl font-bold transition-all active:scale-95">轉換</button>
+            </div>
+            <div id="batchResult" class="mt-4 text-center font-bold text-orange-800 text-lg min-h-[1.75rem]"></div>
+        </section>
+    </main>
 
-  <!-- Flatpickr JS & 中文語系 -->
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh-tw.js"></script>
+    <!-- Flatpickr JS & 中文語系 -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh-tw.js"></script>
 
-  <script>
-    // 啟用 Flatpickr 中文日曆
-    flatpickr("#mfgDate", {
-      locale: "zh_tw",
-      dateFormat: "Y年m月d日",
-      defaultDate: "today"
-    });
+    <script>
+        // 啟用 Flatpickr 中文日曆
+        flatpickr("#mfgDate", {
+            locale: "zh_tw",
+            dateFormat: "Y年m月d日",
+            defaultDate: "today"
+        });
 
-    // 箱數計算
-    document.getElementById('calculateBtn').addEventListener('click', () => {
-      const v = id => parseInt(document.getElementById(id).value) || 0;
-      const weight12 = 12/7; 
-      const totalUnits = v('box12')*weight12 + v('box10') + v('box8') + v('box6');
-      let big = Math.floor(totalUnits / 12);
-      const rem = totalUnits % 12;
-      let mid = 0;
-      if (rem > 0) {
-        if (rem > 8) big++;
-        else mid = 1;
-      }
-      const totalBoxes = v('box12') + v('box10') + v('box8') + v('box6');
-      document.getElementById('resultText').innerHTML =
-        `大箱：${big} 個<br>中箱：${mid} 個<br>總盒數：${totalBoxes}`;
-    });
+        // 數據矩陣：[小, 中, 大]
+        const DATA = {
+            item1: [1, 4, 2],
+            item2: [2, 4, 2],
+            item3: [4, 16, 6],
+            item4: [3, 12, 6],
+            item5: [3, 10, 8],
+            item6: [3, 10, 8],
+            item7: [8, 12, 10]
+        };
 
-    // 重置
-    document.getElementById('resetBtn').addEventListener('click', () => {
-      ['box12','box10','box8','box6'].forEach(id => document.getElementById(id).value = 0);
-      document.getElementById('resultText').textContent = '請輸入數量並點擊「計算箱數」。';
-    });
+        // 箱數計算邏輯
+        document.getElementById('calculateBtn').addEventListener('click', () => {
+            const v = id => parseInt(document.getElementById(id).value) || 0;
+            
+            let counts = {
+                item1: v('item1'), item2: v('item2'), item3: v('item3'),
+                item4: v('item4'), item5: v('item5'), item6: v('item6'),
+                item7: v('item7')
+            };
 
-    // 效期計算
-    document.getElementById('expiryBtn').addEventListener('click', () => {
-      const mfg = document.getElementById('mfgDate').value;
-      const days = parseInt(document.getElementById('storageType').value);
-      if(!mfg){ document.getElementById('expiryResult').textContent = '請選擇日期'; return; }
-      const mfgDate = new Date(mfg.replace(/[年月]/g, "-").replace("日","")); 
-      if(isNaN(mfgDate)){ document.getElementById('expiryResult').textContent = '日期格式錯誤'; return; }
-      const expiry = new Date(mfgDate.getTime() + days*24*60*60*1000);
-      document.getElementById('expiryResult').textContent = `到期日：${expiry.getFullYear()}年${expiry.getMonth()+1}月${expiry.getDate()}日`;
-    });
+            let res = { large: 0, medium: 0, small: 0 };
+            const totalItems = Object.values(counts).reduce((a, b) => a + b, 0);
 
-    // 批號轉換 (16進 -> 10進)
-    document.getElementById('toDecBtn').addEventListener('click', () => {
-      const hex = document.getElementById('hexInput').value.trim();
-      if(!/^[0-9a-fA-F]+$/.test(hex)){ 
-        document.getElementById('batchResult').textContent = '請輸入有效的16進制字串'; 
-        return; 
-      }
-      const dec = parseInt(hex,16);
-      document.getElementById('batchResult').textContent = `${hex.toUpperCase()} = ${dec}`;
-    });
-  </script>
+            // 1. 優先填滿中箱 (中箱在您的數據中效率最高)
+            for (let key in DATA) {
+                let medCap = DATA[key][1];
+                if (counts[key] >= medCap) {
+                    let num = Math.floor(counts[key] / medCap);
+                    res.medium += num;
+                    counts[key] %= medCap;
+                }
+            }
+
+            // 2. 處理散數併箱
+            let hasRemainder = Object.values(counts).some(c => c > 0);
+            if (hasRemainder) {
+                const checkFit = (idx) => {
+                    let ratioSum = 0;
+                    for (let key in DATA) {
+                        ratioSum += counts[key] / DATA[key][idx];
+                    }
+                    return ratioSum <= 1.0001;
+                };
+
+                if (checkFit(0)) res.small++;
+                else if (checkFit(2)) res.large++;
+                else res.medium++;
+            }
+
+            document.getElementById('resultText').innerHTML = `
+                <div class="flex flex-col gap-1">
+                    <p class="flex justify-between border-b border-indigo-100 pb-1"><span>大紙箱：</span><span class="font-black text-xl">${res.large}</span></p>
+                    <p class="flex justify-between border-b border-indigo-100 pb-1"><span>中紙箱：</span><span class="font-black text-xl">${res.medium}</span></p>
+                    <p class="flex justify-between border-b border-indigo-100 pb-1"><span>小紙箱：</span><span class="font-black text-xl">${res.small}</span></p>
+                    <p class="mt-2 text-xs text-indigo-400 text-right">總計盒數：${totalItems}</p>
+                </div>
+            `;
+        });
+
+        // 重置功能
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            for(let i=1; i<=7; i++) document.getElementById('item'+i).value = 0;
+            document.getElementById('resultText').textContent = '請輸入數量並點擊「計算箱數」。';
+            document.getElementById('expiryResult').textContent = '';
+            document.getElementById('batchResult').textContent = '';
+            document.getElementById('hexInput').value = '';
+        });
+
+        // 效期計算
+        document.getElementById('expiryBtn').addEventListener('click', () => {
+            const mfg = document.getElementById('mfgDate').value;
+            const days = parseInt(document.getElementById('storageType').value);
+            if(!mfg){ document.getElementById('expiryResult').textContent = '請選擇日期'; return; }
+            
+            // 處理中文日期轉日期物件
+            const dateStr = mfg.replace(/[年月]/g, "-").replace("日","");
+            const mfgDate = new Date(dateStr); 
+            
+            if(isNaN(mfgDate)){ document.getElementById('expiryResult').textContent = '日期格式錯誤'; return; }
+            
+            const expiry = new Date(mfgDate.getTime() + days * 24 * 60 * 60 * 1000);
+            document.getElementById('expiryResult').textContent = 
+                `到期日：${expiry.getFullYear()}年${expiry.getMonth()+1}月${expiry.getDate()}日`;
+        });
+
+        // 批號轉換
+        document.getElementById('toDecBtn').addEventListener('click', () => {
+            const hex = document.getElementById('hexInput').value.trim();
+            if(!/^[0-9a-fA-F]+$/.test(hex)){ 
+                document.getElementById('batchResult').textContent = '請輸入有效的16進制字串'; 
+                return; 
+            }
+            const dec = parseInt(hex, 16);
+            document.getElementById('batchResult').textContent = `${hex.toUpperCase()} ➔ ${dec}`;
+        });
+    </script>
 </body>
 </html>
