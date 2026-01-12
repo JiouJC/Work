@@ -37,7 +37,7 @@
         <!-- 箱數計算區區塊 -->
         <section class="section-card">
             <div class="flex items-center justify-between mb-4 border-b pb-2">
-                <h2 class="text-lg font-bold text-slate-700">箱數計算 (精確比例)</h2>
+                <h2 class="text-lg font-bold text-slate-700">箱數計算 (大箱優先)</h2>
                 <span class="text-xs text-indigo-500 font-bold bg-indigo-50 px-2 py-1 rounded">最優併箱算法</span>
             </div>
             
@@ -147,30 +147,36 @@
             let res = { large: 0, medium: 0, small: 0 };
             const totalItems = Object.values(counts).reduce((a, b) => a + b, 0);
 
-            // 1. 優先填滿大箱 (大箱在您的數據中效率最高)
+            // 1. 優先填滿大箱 (大箱為優先邏輯)
             for (let key in DATA) {
-                let medCap = DATA[key][1];
-                if (counts[key] >= medCap) {
-                    let num = Math.floor(counts[key] / medCap);
+                let largeCap = DATA[key][2]; // 大箱容量
+                if (counts[key] >= largeCap) {
+                    let num = Math.floor(counts[key] / largeCap);
                     res.large += num;
-                    counts[key] %= medCap;
+                    counts[key] %= largeCap;
                 }
             }
 
-            // 2. 處理散數併箱
+            // 2. 處理剩下的散數併箱
             let hasRemainder = Object.values(counts).some(c => c > 0);
             if (hasRemainder) {
                 const checkFit = (idx) => {
                     let ratioSum = 0;
                     for (let key in DATA) {
+                        // 佔位比例 = 剩餘數量 / 該箱型容量
                         ratioSum += counts[key] / DATA[key][idx];
                     }
-                    return ratioSum <= 1.0001;
+                    return ratioSum <= 1.0001; // 容錯
                 };
 
-                if (checkFit(0)) res.small++;
-                else if (checkFit(2)) res.large++;
-                else res.medium++;
+                // 散數併箱優先嘗試最小的箱子，以節省空間
+                if (checkFit(0)) {
+                    res.small++;
+                } else if (checkFit(1)) {
+                    res.medium++;
+                } else {
+                    res.large++;
+                }
             }
 
             document.getElementById('resultText').innerHTML = `
@@ -192,13 +198,12 @@
             document.getElementById('hexInput').value = '';
         });
 
-        // 效期計算
+        // 效期計算 (與原始功能一致)
         document.getElementById('expiryBtn').addEventListener('click', () => {
             const mfg = document.getElementById('mfgDate').value;
             const days = parseInt(document.getElementById('storageType').value);
             if(!mfg){ document.getElementById('expiryResult').textContent = '請選擇日期'; return; }
             
-            // 處理中文日期轉日期物件
             const dateStr = mfg.replace(/[年月]/g, "-").replace("日","");
             const mfgDate = new Date(dateStr); 
             
@@ -209,7 +214,7 @@
                 `到期日：${expiry.getFullYear()}年${expiry.getMonth()+1}月${expiry.getDate()}日`;
         });
 
-        // 批號轉換
+        // 批號轉換 (與原始功能一致)
         document.getElementById('toDecBtn').addEventListener('click', () => {
             const hex = document.getElementById('hexInput').value.trim();
             if(!/^[0-9a-fA-F]+$/.test(hex)){ 
