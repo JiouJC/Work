@@ -31,7 +31,7 @@
     </style>
 </head>
 <body class="min-h-screen py-8 px-4">
-    <main class="w-full max-w-2xl mx-auto space-y-6">
+    <main class="w-full max-w-3xl mx-auto space-y-6">
         <h1 class="text-3xl font-black text-center text-slate-800 mb-8">📦 出貨計算綜合工具</h1>
 
         <!-- 箱數計算區區塊 -->
@@ -70,6 +70,10 @@
                     6入星空天地蓋盒
                     <input id="item7" type="number" min="0" value="0" class="num w-20 text-center border rounded-lg px-2 py-1 focus:ring-2 focus:ring-indigo-500 outline-none">
                 </label>
+                <label class="flex items-center justify-between text-sm font-medium text-slate-600">
+                    花手鞠
+                    <input id="item8" type="number" min="0" value="0" class="num w-20 text-center border rounded-lg px-2 py-1 focus:ring-2 focus:ring-indigo-500 outline-none">
+                </label>
             </div>
 
             <div class="grid grid-cols-2 gap-3">
@@ -94,6 +98,7 @@
                     <option value="14">冷藏+14天</option>
                     <option value="21">常溫+21天</option>
                     <option value="30">特殊+30天</option>
+                    <option value="45">陽光+45天</option>
                 </select>
             </div>
             <button id="expiryBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl w-full shadow-lg shadow-emerald-100 transition-all active:scale-95">產出效期日期</button>
@@ -125,13 +130,14 @@
 
         // 數據矩陣：[小, 中, 大]
         const DATA = {
-            item1: [1, 4, 6],
-            item2: [2, 4, 6],
-            item3: [4, 6, 16],
-            item4: [3, 6, 12],
-            item5: [3, 8, 12],
-            item6: [3, 8, 10],
-            item7: [8, 10, 14]
+            item1: [1, 3, 6],   // 雙層-真愛挑日子
+            item2: [2, 3, 6],   // 雙層-自製盒
+            item3: [4, 6, 16],  // 華麗伯爵
+            item4: [3, 6, 12],  // 山茶花開時&HANA
+            item5: [3, 8, 12],  // 和光菓室&織花
+            item6: [3, 8, 10],  // 微笑俱樂部
+            item7: [8, 10, 18], // 6入星空天地蓋盒
+            item8: [0, 4, 6]    // 花手鞠
         };
 
         // 箱數計算邏輯
@@ -141,16 +147,16 @@
             let counts = {
                 item1: v('item1'), item2: v('item2'), item3: v('item3'),
                 item4: v('item4'), item5: v('item5'), item6: v('item6'),
-                item7: v('item7')
+                item7: v('item7'), item8: v('item8')
             };
 
             let res = { large: 0, medium: 0, small: 0 };
             const totalItems = Object.values(counts).reduce((a, b) => a + b, 0);
 
-            // 1. 優先填滿大箱 (大箱為優先邏輯)
+            // 1. 優先填滿大箱 (最優先)
             for (let key in DATA) {
-                let largeCap = DATA[key][2]; // 大箱容量
-                if (counts[key] >= largeCap) {
+                let largeCap = DATA[key][2]; // 大箱容量索引 2
+                if (largeCap > 0 && counts[key] >= largeCap) {
                     let num = Math.floor(counts[key] / largeCap);
                     res.large += num;
                     counts[key] %= largeCap;
@@ -163,13 +169,17 @@
                 const checkFit = (idx) => {
                     let ratioSum = 0;
                     for (let key in DATA) {
-                        // 佔位比例 = 剩餘數量 / 該箱型容量
-                        ratioSum += counts[key] / DATA[key][idx];
+                        let capacity = DATA[key][idx];
+                        if (capacity === 0) {
+                            if (counts[key] > 0) return false;
+                            else continue;
+                        }
+                        ratioSum += counts[key] / capacity;
                     }
-                    return ratioSum <= 1.0001; // 容錯
+                    return ratioSum <= 1.0001; 
                 };
 
-                // 散數併箱優先嘗試最小的箱子，以節省空間
+                // 散數併箱依序嘗試最小可容納的箱型：小 -> 中 -> 大
                 if (checkFit(0)) {
                     res.small++;
                 } else if (checkFit(1)) {
@@ -180,25 +190,37 @@
             }
 
             document.getElementById('resultText').innerHTML = `
-                <div class="flex flex-col gap-1">
-                    <p class="flex justify-between border-b border-indigo-100 pb-1"><span>大紙箱：</span><span class="font-black text-xl">${res.large}</span></p>
-                    <p class="flex justify-between border-b border-indigo-100 pb-1"><span>中紙箱：</span><span class="font-black text-xl">${res.medium}</span></p>
-                    <p class="flex justify-between border-b border-indigo-100 pb-1"><span>小紙箱：</span><span class="font-black text-xl">${res.small}</span></p>
-                    <p class="mt-2 text-xs text-indigo-400 text-right">總計盒數：${totalItems}</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="text-center p-4 bg-white rounded-lg border border-indigo-200">
+                        <p class="text-xs text-indigo-500 font-bold mb-1">大紙箱</p>
+                        <p class="font-black text-3xl text-indigo-900">${res.large}</p>
+                    </div>
+                    <div class="text-center p-4 bg-white rounded-lg border border-indigo-200">
+                        <p class="text-xs text-indigo-500 font-bold mb-1">中紙箱</p>
+                        <p class="font-black text-3xl text-indigo-900">${res.medium}</p>
+                    </div>
+                    <div class="text-center p-4 bg-white rounded-lg border border-indigo-200">
+                        <p class="text-xs text-indigo-500 font-bold mb-1">小紙箱</p>
+                        <p class="font-black text-3xl text-indigo-900">${res.small}</p>
+                    </div>
                 </div>
+                <p class="mt-4 text-xs text-indigo-400 text-right">總計盒數：${totalItems}</p>
             `;
         });
 
         // 重置功能
         document.getElementById('resetBtn').addEventListener('click', () => {
-            for(let i=1; i<=7; i++) document.getElementById('item'+i).value = 0;
+            for(let i=1; i<=8; i++) {
+                const input = document.getElementById('item'+i);
+                if(input) input.value = 0;
+            }
             document.getElementById('resultText').textContent = '請輸入數量並點擊「計算箱數」。';
             document.getElementById('expiryResult').textContent = '';
             document.getElementById('batchResult').textContent = '';
             document.getElementById('hexInput').value = '';
         });
 
-        // 效期計算 (與原始功能一致)
+        // 效期計算
         document.getElementById('expiryBtn').addEventListener('click', () => {
             const mfg = document.getElementById('mfgDate').value;
             const days = parseInt(document.getElementById('storageType').value);
@@ -214,7 +236,7 @@
                 `到期日：${expiry.getFullYear()}年${expiry.getMonth()+1}月${expiry.getDate()}日`;
         });
 
-        // 批號轉換 (與原始功能一致)
+        // 批號轉換
         document.getElementById('toDecBtn').addEventListener('click', () => {
             const hex = document.getElementById('hexInput').value.trim();
             if(!/^[0-9a-fA-F]+$/.test(hex)){ 
